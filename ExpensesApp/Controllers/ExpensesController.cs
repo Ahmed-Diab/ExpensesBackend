@@ -48,7 +48,7 @@ namespace ExpensesApp.Controllers
                 {
                     return Ok(new { success = true, data = data });
                 }
-                return Ok(new { success = false, message = "تعزر جلب الداتا الخاصه بك من فضلك حاول لاحقا" });
+                return Ok(new { success = false, message = "can't find any data" });
             }
             catch (Exception ex)
             {
@@ -66,7 +66,7 @@ namespace ExpensesApp.Controllers
                 {
                     return Ok(new { success = true, data = data });
                 }
-                return Ok(new { success = false, message = "لا يوجد داتا بهذا الكود" });
+                return Ok(new { success = false, message = "can't find any data by this id" });
             }
             catch (Exception ex)
             {
@@ -102,9 +102,14 @@ namespace ExpensesApp.Controllers
             {
                 string usersId = HttpContext.Request.Headers["userId"];
                 data.UserId = int.Parse(usersId);
-                var imageAfterRezize = Helper.Helper.ResizeBase64ImageString(data.ImageNote, 400, 400);
-                var imageNote = System.Convert.FromBase64String(imageAfterRezize);
-                var imagePath = Helper.Helper.SaveImageToDirectory(imageAfterRezize, data.ImageNoteFormat, _environment.ContentRootPath);
+                var imagePath = "";
+                byte[] imageNote = new byte[0];
+                if (!String.IsNullOrEmpty(data.ImageNote))
+                {
+                    var imageAfterRezize = Helper.Helper.ResizeBase64ImageString(data.ImageNote, 400, 400);
+                    imageNote = System.Convert.FromBase64String(imageAfterRezize);
+                    imagePath = Helper.Helper.SaveImageToDirectory(imageAfterRezize, data.ImageNoteFormat, _environment.ContentRootPath);
+                }
 
                 //var imageNote = System.Convert.FromBase64String(data.ImageNote);
                 var voiceNote = System.Convert.FromBase64String(data.VoiceNote);
@@ -129,9 +134,9 @@ namespace ExpensesApp.Controllers
                 if (addedData != null)
                 {
 
-                    return Ok(new { success = true, data = addedData, message = "تم الحفظ بنجاح" });
+                    return Ok(new { success = true, data = addedData, message = "Success Saved" });
                 }
-                return Ok(new { success = false, message = "لم يتمكن من الحفظ الرجاء المحاوله مره اخرى لاحقا" });
+                return Ok(new { success = false, message = "Can't save data try again later" });
 
             }
             catch (Exception ex)
@@ -164,9 +169,9 @@ namespace ExpensesApp.Controllers
                     dataById.ImageNoteFormat = data.ImageNoteFormat;
                     dataById.VoiceNoteFormat = data.VoiceNoteFormat;
                      await _unitOfWork.Complete();
-                    return Ok(new { success = true, message = "تم التعديل بنجاح", data = dataById });
+                    return Ok(new { success = true, message = "Success Update", data = dataById });
                 }
-                return Ok(new { success = false, message = "لم نتمكن من العصور على المصروف لحفظ التعديل عليها" });
+                return Ok(new { success = false, message = "Can't find expense" });
             }
             catch (Exception ex)
             {
@@ -188,13 +193,13 @@ namespace ExpensesApp.Controllers
                 var data = await _unitOfWork.Expenses.GetByIdAsync(id);
                 if (data == null)
                 {
-                    return Ok(new { success = false, message = "هذا المصروف غير موجود" });
+                    return Ok(new { success = false, message = "Can't find expense" });
                 }
                 else
                 {
                     var deletedData = await _unitOfWork.Expenses.Delete(data);
                     await _unitOfWork.Complete();
-                    return Ok(new { success = true, message ="تم الحذف بنجاح", data = data });
+                    return Ok(new { success = true, message ="Success Delete", data = data });
                 }
             }
             catch (Exception ex)

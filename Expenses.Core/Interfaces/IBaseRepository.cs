@@ -30,19 +30,7 @@ namespace Expenses.Core.Interfaces
         int Count(Expression<Func<T, bool>> criteria);
         Task<int> CountAsync();
         Task<int> CountAsync(Expression<Func<T, bool>> criteria);
-        Task<T> GetLastRecored();
-        //void Attach(T entity);
-        //void AttachRange(IEnumerable<T> entities);
-        // IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, string[] includes = null);
-        // IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, int take, int skip);
-        //  IEnumerable<T> FindAll(Expression<Func<T, bool>> criteria, int? take, int? skip, 
-        //     Expression<Func<T, object>> orderBy = null, string orderByDirection = OrderBy.Ascending);
-        //  IEnumerable<T> AddRange(IEnumerable<T> entities);
-        //   T Update(T entity);
-        // T Add(T entity);
-        //  T Find(Expression<Func<T, bool>> criteria, string[] includes = null);
-        //  IEnumerable<T> GetAll();
-        //  T GetById(int id);
+ 
 
     }
 }

@@ -10,7 +10,8 @@ namespace Expenses.EF.Repositories
         protected ApplicationDbContext _context;
 
         public BaseRepository(ApplicationDbContext context)
-        {
+        { 
+
             _context = context;
         }
         public IEnumerable<T> CreateUser()

@@ -37,7 +37,7 @@ namespace ExpensesApp.Controllers
                 {
                     return Ok(new { success = true, data = listOfData });
                 }
-                return Ok(new { success = false, message = "تعزر جلب الداتا الخاصه بك من فضلك حاول لاحقا" });
+                return Ok(new { success = false, message = "can't find any data" });
             }
             catch (Exception ex)
             {
@@ -55,7 +55,7 @@ namespace ExpensesApp.Controllers
                 {
                     return Ok(new { success = true, data = data });
                 }
-                return Ok(new { success = false, message = "لا يوجد داتا بهذا الكود" });
+                return Ok(new { success = false, message = "Can't find any data by this id" });
             }
             catch (Exception ex)
             {
@@ -76,9 +76,9 @@ namespace ExpensesApp.Controllers
                 await _unitOfWork.Complete();
                 if (addedData != null)
                 {
-                    return Ok(new { success = true, data = addedData, message = "تم الحفظ بنجاح" });
+                    return Ok(new { success = true, data = addedData, message = "success saved" });
                 }
-                return Ok(new { success = false, message = "لم يتمكن من الحفظ الرجاء المحاوله مره اخرى لاحقا" });
+                return Ok(new { success = true, data = addedData, message = "Can't Save Data" });
 
             }
             catch (Exception ex)
@@ -104,9 +104,9 @@ namespace ExpensesApp.Controllers
                 {
                     dataById.Name = dataAfterMaped.Name.Trim(); ;
                       await _unitOfWork.Complete();
-                    return Ok(new { success = true, message = "تم التعديل بنجاح", data = dataById });
+                    return Ok(new { success = true, message = "success save", data = dataById });
                 }
-                return Ok(new { success = false, message = "لم نتمكن من العصور على المصروف لحفظ التعديل عليها" });
+                return Ok(new { success = false, message = "can't find the expenses to update" });
             }
             catch (Exception ex)
             {
@@ -125,16 +125,18 @@ namespace ExpensesApp.Controllers
         {
             try
             {
+                var categoryAlreadyTaken = await _unitOfWork.Expenses.AnyAsync(x => x.CategoryId == id);
+                if(categoryAlreadyTaken) return Ok(new { success = false, message = "can't deleted this category because there are reliable records on it" });
                 var data = await _unitOfWork.Categories.GetByIdAsync(id);
                 if (data == null)
                 {
-                    return Ok(new { success = false, message = "هذا المصروف غير موجود" });
+                    return Ok(new { success = false, message = "can't find this expense" });
                 }
                 else
                 {
                     var deletedData = await _unitOfWork.Categories.Delete(data);
                     await _unitOfWork.Complete();
-                    return Ok(new { success = true, message = "تم الحذف بنجاح", data = data });
+                    return Ok(new { success = true, message = "Success", data = data });
                 }
             }
             catch (Exception ex)
