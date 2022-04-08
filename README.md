@@ -6,7 +6,8 @@ You can check this link to get the frontend part https://github.com/Ahmed-Diab/E
 ## Using 
 - make sure you install .net core 6.
 - make sure you install MSSQL 2019.
-- clone frontend `git clone https://github.com/Ahmed-Diab/ExpensesBackend.git` .
+- Clone Backend `git clone https://github.com/Ahmed-Diab/ExpensesBackend.git` .
+- Clone Frontend `git clone https://github.com/Ahmed-Diab/ExpensesFrontend.git` .
 
 ## Images
 ![alt text](./ExpensesApp/images/git-images/swagger.PNG)
